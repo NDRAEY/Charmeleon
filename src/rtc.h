@@ -1,20 +1,20 @@
 #ifndef RTC_H
 #define RTC_H
+#include <stdint.h>
 
 typedef struct {
-	short hr;
-	short min;
-	short sec;
-} time;
+	char hr;
+	char sec;
+	char min;
+	char dy;
+	char mn;
+	char yr;
+} time_t;
 
-typedef struct {
-	char hr[4];
-	char min[4];
-	char sec[4];
-} time_c;
-
-char read_rtc(int r);
-time_c gettime_c();
-time gettime();
+uint8_t read_rtc(int r);
+void rtc_init();
+time_t read_time();
+int rtc_isupd();
+char* getstrtime();
 
 #endif

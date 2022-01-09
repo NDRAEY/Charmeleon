@@ -2,6 +2,7 @@
 #include "font.h"
 #include "string.h"
 #include "random.h"
+//#include "ports.h"
 #include "rtc.h"
 
 int pixidx(int x, int y){
@@ -85,30 +86,6 @@ void drawrect(rect_colored r){
 	}
 }
 
-rgb_color blend_colors(rgba_color c1, rgba_color c2) {
-    uint32_t alpha1 = c1.a;
-    uint32_t red1 = c1.r;
-    uint32_t green1 = c1.g;
-    uint32_t blue1 = c1.b;
-
-    uint32_t alpha2 = c2.a;
-    uint32_t red2 = c2.r;
-    uint32_t green2 = c2.g;
-    uint32_t blue2 = c2.b;
-
-    uint32_t r = (uint32_t)((alpha1 * 1.0 / 255) * red1);
-    uint32_t g = (uint32_t)((alpha1 * 1.0 / 255) * green1);
-    uint32_t b = (uint32_t)((alpha1 * 1.0 / 255) * blue1);
-
-	rgb_color rgb;
-
-    rgb.r = r + (((255 - alpha1) * 1.0 / 255) * (alpha2 * 1.0 / 255)) * red2;
-    rgb.g = g + (((255 - alpha1) * 1.0 / 255) * (alpha2 * 1.0 / 255)) * green2;
-    rgb.b = b + (((255 - alpha1) * 1.0 / 255) * (alpha2 * 1.0 / 255)) * blue2;
-
-    return rgb;
-}
-
 void imagedraw(char meleon[], int width, int height, int startx, int starty){
 	for(int i=0; i<height;i++){
 		for(int j=0; j<width;j++) {
@@ -133,29 +110,51 @@ void imagedraw2(char meleon[], int width, int height, int startx, int starty){
 
 void main(unsigned long magic, unsigned long addr) {
 	inf = (multiboot_info_t*)addr;
+	magic = magic^2; // supress warning
 	fb = (uint32_t*)inf->framebuffer_addr;
 	font_init();
+	rtc_init();
+	rand_init();
 	rect_colored rc = createrect_colored(0,0,inf->framebuffer_width,720,generate_rgb(220,33,0));
 	drawrect(rc);
-	rect_colored rclear = createrect_colored(8,58,16+(8*10),58+16,generate_rgb(220,33,0));
-	imagedraw(someimage, someimage_width, someimage_height, 70, 70);
+	imagedraw(someimage, someimage_width, someimage_height, 120, 120);
 	drawtext("OH-LALA!!! Charmeleon is here!!!\n(@charmeleon.ndraey)",8,10);
 	char num[16];
-	itoa(rand(65536),num);
+	itoa(rand(65536*2),num);
 	drawtext(num,8,10+16+16);
-	time_c timez;
-	char ti[12*3];
-	while(1){
-		timez = gettime_c();
-		strcpy(ti,timez.hr);
-		strcat(ti,":");
-		strcat(ti,timez.min);
-		strcat(ti,":");
-		strcat(ti,timez.sec);
-		drawtext(ti,8,58);
-		for(int i=0; i<0xFFFFFFF+0xFFFFFF;i++){}
-		for(int j=0; j<12*3; j++){ti[j]=0;}
-		drawrect(rclear);
-		for(int i=0; i<0xFFFFF+0xFFFF;i++){}
+
+	time_t timez;
+	timez = read_time();
+	char ti[12*6];
+	char sc[8];
+	char mn[8];
+	char hr[8];
+	char dy[8];
+	char mnt[8];
+	char yr[8];
+	itoa(timez.hr,hr);
+	itoa(timez.min,mn);
+	itoa(timez.sec,sc);
+	itoa(timez.dy,dy);
+	itoa(timez.mn,mnt);
+	itoa(timez.yr,yr);
+	strcpy(ti,hr);
+	strcat(ti,":");
+	strcat(ti,mn);
+	strcat(ti,":");
+	strcat(ti,sc);
+	strcat(ti,"\n");
+	strcat(ti,dy);
+	strcat(ti,"/");
+	strcat(ti,mn);
+	strcat(ti,"/");
+	strcat(ti,yr);
+	drawtext(ti,8,58);
+	/*
+	for(int i=0; i<45; i++){
+		drawtext("NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY",0,i*16);
 	}
+	imagedraw(someimage, someimage_width, someimage_height, (inf->framebuffer_width-someimage_width)/2, (inf->framebuffer_height-someimage_height)/2);
+	*/
+	while(1){}
 }

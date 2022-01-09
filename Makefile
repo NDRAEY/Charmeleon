@@ -1,24 +1,52 @@
-include defs.mk
+include ./defs.mk
 
-all:
+SOURCES = $(wildcard src/*.c)
+	  
+OBJS = temps/main.o \
+       temps/font.o \
+       temps/font_parse.o \
+       temps/string.o \
+       temps/random.o \
+       temps/ports.o \
+       temps/rtc.o 
+       
+IMAGE = image.c
+IMAGE_PNG = image.png
+IMAGE_OBJ = temps/image.o
+
+ASM = $(wildcard src/*.s)
+ASMOBJS = temps/boot.o
+
+TARGET = build/main.bin
+
+all: $(TARGET)
 	mkdir build || true
 	mkdir temps || true
-	as --32 src/boot.s -o temps/boot.o
-	python3 src/png2charmeleon.py image.png > image.c
-	$(PREFIX)gcc $(CFLAGS) src/main.c -o temps/main.o
-	$(PREFIX)gcc $(CFLAGS) image.c -o temps/image.o
-	$(PREFIX)gcc $(CFLAGS) src/font.c -o temps/font.o
-	$(PREFIX)gcc $(CFLAGS) src/font_parse.c -o temps/font_parse.o
-	$(PREFIX)gcc $(CFLAGS) src/string.c -o temps/string.o
-	$(PREFIX)gcc $(CFLAGS) src/random.c -o temps/random.o
-	$(PREFIX)gcc $(CFLAGS) src/ports.c -o temps/ports.o
-	$(PREFIX)gcc $(CFLAGS) src/rtc.c -o temps/rtc.o
-	$(PREFIX)ld $(LDFLAGS) temps/boot.o temps/main.o temps/string.o temps/rtc.o temps/ports.o temps/random.o temps/font_parse.o temps/font.o temps/image.o -o build/main.bin
 	#setup
 	mkdir build/boot/grub/ -p || true
 	cp src/grub.cfg build/boot/grub/grub.cfg
 	grub-mkrescue build/ -o total.iso
 	qemu-system-x86_64 -m 150M -s -cdrom total.iso
+
+$(IMAGE_OBJ): $(IMAGE)
+	@echo "IMAGE" $@
+	$(PREFIX)gcc $(CFLAGS) $(IMAGE) -o $@
+
+$(IMAGE): $(IMAGE_PNG)
+	@echo "IMAGE2C" $@
+	@python3 src/png2charmeleon.py $< > $(IMAGE)
+
+$(ASMOBJS): temps/%.o : src/%.s
+	@echo "ASM" $@ $<
+	@as --32 $< -o $@
+
+$(OBJS): temps/%.o : src/%.c
+	@echo "CC" $@ $<
+	@$(PREFIX)gcc $(CFLAGS) $< -o $@
+
+$(TARGET): $(ASMOBJS) $(IMAGE_OBJ) $(OBJS)
+	@echo "LD" $(TARGET)
+	@$(PREFIX)ld $(LDFLAGS) $(ASMOBJS) $(IMAGE_OBJ) $(OBJS) -o $(TARGET)
 
 clean:
 	rm build/* -r || true
