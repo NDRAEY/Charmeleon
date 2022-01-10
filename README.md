@@ -1,8 +1,8 @@
-#CharmeleonOS
+# CharmeleonOS
     It's a kernel that displays image and some text.
     In future it will be remade to final OS.
 
-#Installation
+# Installation
     To build OS, you should install requirements.
     To install type following command:
 
