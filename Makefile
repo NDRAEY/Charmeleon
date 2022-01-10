@@ -11,8 +11,10 @@ OBJS = temps/main.o \
        temps/rtc.o 
        
 IMAGE = image.c
-IMAGE_PNG = image.png
+IMAGE_PNG = agumon.png
 IMAGE_OBJ = temps/image.o
+
+ISO = total.iso
 
 ASM = $(wildcard src/*.s)
 ASMOBJS = temps/boot.o
@@ -20,17 +22,18 @@ ASMOBJS = temps/boot.o
 TARGET = build/main.bin
 
 all: $(TARGET)
-	mkdir build || true
-	mkdir temps || true
+	@mkdir build || true
+	@mkdir temps || true
 	#setup
-	mkdir build/boot/grub/ -p || true
-	cp src/grub.cfg build/boot/grub/grub.cfg
-	grub-mkrescue build/ -o total.iso
-	qemu-system-x86_64 -m 150M -s -cdrom total.iso -serial stdio
+	@mkdir build/boot/grub/ -p || true
+	@cp src/grub.cfg build/boot/grub/grub.cfg
+	@echo "XORRISO [GRUB-MKDRESCUE]" $(ISO)
+	@grub-mkrescue build/ -o $(ISO)	
+	qemu-system-x86_64 -rtc base=localtime -m 150M -s -cdrom $(ISO) -serial stdio
 
 $(IMAGE_OBJ): $(IMAGE)
 	@echo "IMAGE" $@
-	$(PREFIX)gcc $(CFLAGS) $(IMAGE) -o $@
+	@$(PREFIX)gcc $(CFLAGS) $(IMAGE) -o $@
 
 $(IMAGE): $(IMAGE_PNG)
 	@echo "IMAGE2C" $@

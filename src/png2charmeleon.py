@@ -15,3 +15,5 @@ image = png.Reader(sys.argv[-1])
 data = ','.join([str(d) for d in data])
 
 print(snippet%(width,height,width*height*(3 if not meta['alpha'] else 4),data))
+
+sys.stderr.write(str(meta))

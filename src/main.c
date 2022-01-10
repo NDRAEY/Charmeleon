@@ -121,10 +121,11 @@ void main(unsigned long magic, unsigned long addr) {
 	font_init();
 	rtc_init();
 	rand_init();
-	rect_colored rc = createrect_colored(0,0,inf->framebuffer_width,720,generate_rgb(220,33,0));
+	rect_colored rc = createrect_colored(0,0,inf->framebuffer_width,inf->framebuffer_height,generate_rgb(220,35,0));
 	drawrect(rc);
-	imagedraw(someimage, someimage_width, someimage_height, 120, 120);
-	drawtext("OH-LALA!!! Charmeleon is here!!!\n(@charmeleon.ndraey)",8,10);
+	imagedraw(someimage, someimage_width, someimage_height, 100, 100);
+	drawtext("OH-LALA!!! Charmeleon is here!!! And Agumon too!!!\n(@charmeleon.ndraey)",8,10);
+	drawtext("Agumon from DIGIMON",(720/2)+(int)(720/8), 78);
 	char num[16];
 	itoa(rand(65536*2),num);
 	drawtext(num,8,10+16+16);
