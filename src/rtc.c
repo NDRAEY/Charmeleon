@@ -2,7 +2,7 @@
 #include "string.h"
 #include "rtc.h"
 
-unsigned char read_rtc(int r){
+uint8_t read_rtc(int r){
 	outb(0x70,r);
 	return inb(0x71);
 }
@@ -38,30 +38,4 @@ time_t read_time(){
 
 void rtc_init(){
 	read_time();
-}
-
-char* getstrtime(){
-	char sec = read_rtc(0);
-	char min = read_rtc(2);
-	char hour = read_rtc(4);
-	char sc[6];
-	char mn[6];
-	char hr[6];
-	/*
-	if(!(read_rtc(0x0b)&0x04)){
-		itoa((int)(((hour&0x0f)+((hour&0x70)/16)*10) | (hour & 0x80)),hr);
-		itoa((int)((sec&0x0f)+(sec/16)*10),sc);
-		itoa((int)((min&0x0f)+(min/16)*10),mn);
-	}else{*/
-		itoa(sec,sc);
-		itoa(min,mn);
-		itoa(hour,hr);
-	//}
-	static char ti[(6*3)+2];
-	strcpy(ti,hr);
-	strcat(ti,":");
-	strcat(ti,mn);
-	strcat(ti,":");
-	strcat(ti,sc);
-	return (char*)(&ti);
 }

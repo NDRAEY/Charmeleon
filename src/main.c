@@ -2,7 +2,7 @@
 #include "font.h"
 #include "string.h"
 #include "random.h"
-//#include "ports.h"
+#include "ports.h"
 #include "rtc.h"
 
 int pixidx(int x, int y){
@@ -108,6 +108,12 @@ void imagedraw2(char meleon[], int width, int height, int startx, int starty){
 	}
 }
 
+void serial_print(char *text){
+	for(int i=0; i<strlen(text); i++){
+		outb(0x3f8,text[i]);
+	}
+}
+
 void main(unsigned long magic, unsigned long addr) {
 	inf = (multiboot_info_t*)addr;
 	magic = magic^2; // supress warning
@@ -146,10 +152,18 @@ void main(unsigned long magic, unsigned long addr) {
 	strcat(ti,"\n");
 	strcat(ti,dy);
 	strcat(ti,"/");
-	strcat(ti,mn);
+	strcat(ti,mnt);
 	strcat(ti,"/");
 	strcat(ti,yr);
 	drawtext(ti,8,58);
+
+	serial_print("Current time is: ");
+	serial_print(hr);
+	serial_print(":");
+	serial_print(mn);
+	serial_print(":");
+	serial_print(sc);
+	serial_print("\n");
 	/*
 	for(int i=0; i<45; i++){
 		drawtext("NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY NDRAEY",0,i*16);

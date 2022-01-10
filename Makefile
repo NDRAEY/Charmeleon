@@ -26,7 +26,7 @@ all: $(TARGET)
 	mkdir build/boot/grub/ -p || true
 	cp src/grub.cfg build/boot/grub/grub.cfg
 	grub-mkrescue build/ -o total.iso
-	qemu-system-x86_64 -m 150M -s -cdrom total.iso
+	qemu-system-x86_64 -m 150M -s -cdrom total.iso -serial stdio
 
 $(IMAGE_OBJ): $(IMAGE)
 	@echo "IMAGE" $@
