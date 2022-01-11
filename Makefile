@@ -8,6 +8,8 @@ OBJS = temps/main.o \
        temps/string.o \
        temps/random.o \
        temps/ports.o \
+       temps/irq.o \
+       temps/pic.o \
        temps/rtc.o 
        
 IMAGE = image.c
@@ -18,6 +20,9 @@ ISO = total.iso
 
 ASM = $(wildcard src/*.s)
 ASMOBJS = temps/boot.o
+
+NASM = $(wildcard src/*.asm)
+NASMOBJS = temps/irq_.o
 
 TARGET = build/main.bin
 
@@ -39,17 +44,21 @@ $(IMAGE): $(IMAGE_PNG)
 	@echo "IMAGE2C" $@
 	@python3 src/png2charmeleon.py $< > $(IMAGE)
 
-$(ASMOBJS): temps/%.o : src/%.s
+$(ASMOBJS): temps/%.o : src/%.s 
 	@echo "ASM" $@ $<
 	@as --32 $< -o $@
+
+$(NASMOBJS): temps/%.o : src/%.asm
+	@echo "NASM" $@ $<
+	@nasm -felf32 $< -o $@
 
 $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
 	@$(PREFIX)gcc $(CFLAGS) $< -o $@
 
-$(TARGET): $(ASMOBJS) $(IMAGE_OBJ) $(OBJS)
+$(TARGET): $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
 	@echo "LD" $(TARGET)
-	@$(PREFIX)ld $(LDFLAGS) $(ASMOBJS) $(IMAGE_OBJ) $(OBJS) -o $(TARGET)
+	@$(PREFIX)ld $(LDFLAGS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS) -o $(TARGET)
 
 clean:
 	rm build/* -r || true
