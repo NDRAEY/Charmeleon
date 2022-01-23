@@ -10,7 +10,11 @@ OBJS = temps/main.o \
        temps/ports.o \
        temps/irq.o \
        temps/pic.o \
-       temps/rtc.o 
+       temps/memmgr.o \
+       temps/rtc.o \
+       temps/paging.o \
+       temps/heap.o \
+       temps/gfx.o \
        
 IMAGE = image.c
 IMAGE_PNG = agumon.png
@@ -29,12 +33,12 @@ TARGET = build/main.bin
 all: $(TARGET)
 	@mkdir build || true
 	@mkdir temps || true
-	#setup
+
 	@mkdir build/boot/grub/ -p || true
 	@cp src/grub.cfg build/boot/grub/grub.cfg
 	@echo "XORRISO [GRUB-MKDRESCUE]" $(ISO)
 	@grub-mkrescue build/ -o $(ISO)	
-	qemu-system-x86_64 -rtc base=localtime -m 150M -s -cdrom $(ISO) -serial stdio
+	qemu-system-x86_64 -rtc base=localtime -m 256M -s -cdrom $(ISO) -serial stdio
 
 $(IMAGE_OBJ): $(IMAGE)
 	@echo "IMAGE" $@
@@ -54,7 +58,7 @@ $(NASMOBJS): temps/%.o : src/%.asm
 
 $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
-	@$(PREFIX)gcc $(CFLAGS) $< -o $@
+	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
 
 $(TARGET): $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
 	@echo "LD" $(TARGET)

@@ -68,6 +68,13 @@ int strcpy(char *dst, const char *src) {
     return i;
 }
 
+int strcpysw(const char *src, char *dst) {
+    int i = 0;
+    while ((*dst++ = *src++) != 0)
+        i++;
+    return i;
+}
+
 void *memset(void *dst,char val, int n)
 {
     char *temp = dst;
@@ -76,6 +83,13 @@ void *memset(void *dst,char val, int n)
 }
 
 void strcat(void *dest, const void *src) {
+    char * end = (char*)dest + strlen(dest);
+    memcpy((char*)end,(char*)src,strlen((char*)src));
+    end = end + strlen((char*)src);
+    //*end = '\0';
+}
+
+void strcatsw(const void *src, void *dest) {
     char * end = (char*)dest + strlen(dest);
     memcpy((char*)end,(char*)src,strlen((char*)src));
     end = end + strlen((char*)src);

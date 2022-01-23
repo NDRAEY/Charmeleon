@@ -23,6 +23,8 @@ SECTIONS
 	{
 		*(COMMON)
 		*(.bss)
+		*(.initial_stack)
+
 	}
 	end = .;
 }

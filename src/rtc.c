@@ -1,5 +1,6 @@
 #include "ports.h"
 #include "string.h"
+#include "heap.h"
 #include "rtc.h"
 
 uint8_t read_rtc(int r){
@@ -34,6 +35,33 @@ time_t read_time(){
 		tm.yr = (tm.yr&0x0f)+((tm.yr/16)*10);
 	}
 	return tm;
+}
+
+char *gettimestr(){
+	char *time = malloc(256);
+	time_t tim = read_time();
+	// 12:09 17/12/2021
+
+	char *hr = malloc(2);
+	char *mn = malloc(2);
+	char *dy = malloc(2);
+	char *mon = malloc(2);
+	char *yr = malloc(2);
+	itoa(tim.hr,hr);
+	itoa(tim.min,mn);
+	itoa(tim.dy,dy);
+	itoa(tim.mn,mon);
+	itoa(tim.yr,yr);
+	strcpy(time,hr);
+	strcatsw(":",time);
+	strcatsw(mn,time);
+	strcatsw(" ",time);
+	strcatsw(dy,time);
+	strcatsw("/",time);
+	strcatsw(mon,time);
+	strcatsw("/",time);
+	strcatsw(yr,time);
+	return time;
 }
 
 void rtc_init(){
