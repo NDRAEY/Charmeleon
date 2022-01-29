@@ -15,6 +15,6 @@ uint8_t read_rtc(int r);
 void rtc_init();
 time_t read_time();
 int rtc_isupd();
-char *gettimestr();
+void gettimestr(char* buf);
 
 #endif

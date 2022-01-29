@@ -328,17 +328,11 @@ void *malloc(uint32_t size) {
                 *trailingSize = t->size;
 
                 if(nextblock == tail){
-                    // I don't want to set it to tail now, instead, reclaim it
                     tail = t;
-                    //int reclaimSize = getRealSize(t->size) + OVERHEAD;
-                    //ksbrk(-reclaimSize);
-                    //goto noSplit;
                 }
-                // then add merged one into the front of the list
                 addNodeToFreelist(t);
             }
             else {
-                // choice a)  seperate!
                 struct Block * putThisBack = ptr;
                 putThisBack->size = rest - OVERHEAD;
                 setFree(&(putThisBack->size), 1);
@@ -346,35 +340,15 @@ void *malloc(uint32_t size) {
                 *trailingSize = putThisBack->size;
                 if(base == tail){
                     tail = putThisBack;
-                    //int reclaimSize = getRealSize(putThisBack->size) + OVERHEAD;
-                    //ksbrk(-reclaimSize);
-                    //goto noSplit;
                 }
                 addNodeToFreelist(putThisBack);
-
             }
         }
 noSplit:
-        // return it!
         removeNodeFromFreelist(base);
         return base + sizeof(struct Block);
     }
     else {
-        // :( no blocks fit my need!  use sbrk, initialize some meta data and return it!
-        // wait! I can still optimize! if the tail block is freed, then I can sbrk less
-        /*
-           if(isFree(tail)) {
-        // Calcullate how much memory to sbrk
-        uint32_t needToSbrk = blockSize - getRealSize(tail->size) - OVERHEAD;
-        ksbrk(needToSbrk);
-        removeNodeFromFreelist(tail);
-        // mark allocated
-        tail->size = blockSize - OVERHEAD;
-        setFree(&(tail->size), 0);
-        trailingSize = (void*)tail + sizeof(struct Block) + getRealSize(tail->size);
-         *trailingSize = tail->size;
-         return tail + 1;
-         }*/
         uint32_t realsize = blockSize;
         struct Block * ret = ksbrk(realsize);
         ASSERT(ret != NULL &&  "Heap is running out of space\n");

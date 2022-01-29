@@ -37,10 +37,6 @@ void * virtual2phys(page_directory_t * dir, void * virtual_addr) {
     return (void*)t;
 }
 
-/*
- * A dumb malloc, just to help building the paging data structure for the first 4mb that our kernel uses
- * It only manages memory from the end of pmm bitmap, to 0xC0400000, approximately 2mb.
- * */
 void * dumb_kmalloc(uint32_t size, int align) {
     void * ret = temp_mem;
     // If it's not aligned, align it first
@@ -50,9 +46,6 @@ void * dumb_kmalloc(uint32_t size, int align) {
     return ret;
 }
 
-/*
- * Allocate a set of pages specified by the region
- * */
 void allocate_region(page_directory_t * dir, uint32_t start_va, uint32_t end_va, int iden_map, int is_kernel, int is_writable) {
     uint32_t start = start_va & 0xfffff000;
     uint32_t end = end_va & 0xfffff000;
@@ -65,10 +58,6 @@ void allocate_region(page_directory_t * dir, uint32_t start_va, uint32_t end_va,
     }
 }
 
-/*
- * Allocate a frame from pmm, write frame number to the page structure
- * You may notice that we've set the both the PDE and PTE as user-accessible with r/w permissions, because..... we don't care security
- * */
 void allocate_page(page_directory_t * dir, uint32_t virtual_addr, uint32_t frame, int is_kernel, int is_writable) {
     page_table_t * table = NULL;
     if(!dir) {
@@ -339,6 +328,3 @@ void page_fault_handler(register_t * reg) {
     uint32_t reserved = reg->err_code & ERR_RESERVED;
     uint32_t inst_fetch = reg->err_code & ERR_INST;
 }
-
-
-

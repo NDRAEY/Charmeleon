@@ -43,6 +43,8 @@ void main(unsigned long magic, unsigned long addr) {
 	fill.g = 35;
 	fill.b = 0;
 
+	char time[128];
+
 	while(1){
 		fillall(fill);
 		imagedraw(someimage, someimage_width, someimage_height, 100, 100);
@@ -51,7 +53,9 @@ void main(unsigned long magic, unsigned long addr) {
 		itoa(rand(65536*2),num);
 		drawtext(num,8,10+16+16);
 
-		drawtext(gettimestr(),8,58);
+		memset(time,0,128);
+		gettimestr(time);
+		drawtext(time,8,58);
 		gfx_update(fb,gfb);
 	}
 }

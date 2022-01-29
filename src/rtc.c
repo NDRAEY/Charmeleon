@@ -37,31 +37,33 @@ time_t read_time(){
 	return tm;
 }
 
-char *gettimestr(){
-	char *time = malloc(256);
+void gettimestr(char* buf){
 	time_t tim = read_time();
 	// 12:09 17/12/2021
 
-	char *hr = malloc(2);
-	char *mn = malloc(2);
-	char *dy = malloc(2);
-	char *mon = malloc(2);
-	char *yr = malloc(2);
+	char hr[3];
+	char mn[3];
+	char sc[3];
+	char dy[3];
+	char mon[3];
+	char yr[3];
 	itoa(tim.hr,hr);
 	itoa(tim.min,mn);
+	itoa(tim.sec,sc);
 	itoa(tim.dy,dy);
 	itoa(tim.mn,mon);
 	itoa(tim.yr,yr);
-	strcpy(time,hr);
-	strcatsw(":",time);
-	strcatsw(mn,time);
-	strcatsw(" ",time);
-	strcatsw(dy,time);
-	strcatsw("/",time);
-	strcatsw(mon,time);
-	strcatsw("/",time);
-	strcatsw(yr,time);
-	return time;
+	strcpy(buf,hr);
+	strcatsw(":",buf);
+	strcatsw(mn,buf);
+	strcatsw(":",buf);
+	strcatsw(sc,buf);
+	strcatsw(" ",buf);
+	strcatsw(dy,buf);
+	strcatsw("/",buf);
+	strcatsw(mon,buf);
+	strcatsw("/",buf);
+	strcatsw(yr,buf);
 }
 
 void rtc_init(){
