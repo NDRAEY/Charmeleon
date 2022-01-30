@@ -59,8 +59,8 @@ $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
 	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
 	
-$(TMPS): %:
-	@mkdir $@
+$(TMPS): $(TEMPFOLDERS):
+	@mkdir $@ || true
 
 $(TARGET): $(TMPS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
 	@echo "LD" $(TARGET)
