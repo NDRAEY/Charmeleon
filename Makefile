@@ -60,6 +60,7 @@ $(OBJS): temps/%.o : src/%.c
 	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
 	
 $(TMPS): $(TEMPFOLDERS)
+	@echo "TF" $@
 	@mkdir $@ || true
 
 $(TARGET): $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
