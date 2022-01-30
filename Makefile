@@ -30,10 +30,10 @@ NASMOBJS = temps/irq_.o
 
 TARGET = build/main.bin
 
-all: $(TARGET)
-	@mkdir build || true
-	@mkdir temps || true
+mkdir build || true
+mkdir temps || true
 
+all: $(TARGET)
 	@mkdir build/boot/grub/ -p || true
 	@cp src/grub.cfg build/boot/grub/grub.cfg
 	@echo "XORRISO [GRUB-MKDRESCUE]" $(ISO)
