@@ -32,7 +32,7 @@ TARGET = build/main.bin
 
 TEMPFOLDERS = build temps
 
-all: $(TARGET)
+all: $(TMPS) $(TARGET)
 	@mkdir build/boot/grub/ -p || true
 	@cp src/grub.cfg build/boot/grub/grub.cfg
 	@echo "XORRISO [GRUB-MKDRESCUE]" $(ISO)
@@ -59,10 +59,10 @@ $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
 	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
 	
-$(TMPS): $(TEMPFOLDERS):
+$(TMPS): $(TEMPFOLDERS)
 	@mkdir $@ || true
 
-$(TARGET): $(TMPS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
+$(TARGET): $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
 	@echo "LD" $(TARGET)
 	@$(PREFIX)ld $(LDFLAGS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS) -o $(TARGET)
 
