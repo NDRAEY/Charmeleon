@@ -30,7 +30,7 @@ NASMOBJS = temps/irq_.o
 
 TARGET = build/main.bin
 
-TEMPFOLDERS = build temps
+TMPS = build temps
 
 all: $(TMPS) $(TARGET)
 	@mkdir build/boot/grub/ -p || true
@@ -59,7 +59,7 @@ $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
 	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
 	
-$(TMPS): $(TEMPFOLDERS)
+$(TMPS):
 	@echo "TF" $@
 	@mkdir $@ || true
 
