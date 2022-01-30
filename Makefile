@@ -30,8 +30,7 @@ NASMOBJS = temps/irq_.o
 
 TARGET = build/main.bin
 
-mkdir build || true
-mkdir temps || true
+TEMPFOLDERS = build temps
 
 all: $(TARGET)
 	@mkdir build/boot/grub/ -p || true
@@ -59,8 +58,11 @@ $(NASMOBJS): temps/%.o : src/%.asm
 $(OBJS): temps/%.o : src/%.c
 	@echo "CC" $@ $<
 	@$(PREFIX)gcc -g $(CFLAGS) $< -o $@
+	
+$(TMPS): %:
+	@mkdir $@
 
-$(TARGET): $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
+$(TARGET): $(TMPS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS)
 	@echo "LD" $(TARGET)
 	@$(PREFIX)ld $(LDFLAGS) $(ASMOBJS) $(NASMOBJS) $(IMAGE_OBJ) $(OBJS) -o $(TARGET)
 
