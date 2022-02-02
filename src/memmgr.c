@@ -1,6 +1,8 @@
 #include "memmgr.h"
 #include "string.h"
 
+// Code from: https://github.com/szhou42/osdev
+
 uint8_t * bitmap = (uint8_t*)(&end);
 uint8_t * mem_start;
 uint32_t total_blocks;

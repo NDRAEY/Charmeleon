@@ -3,6 +3,8 @@
 #include "heap.h"
 #include "rtc.h"
 
+// Code from: https://github.com/szhou42/osdev
+
 uint8_t read_rtc(int r){
 	outb(0x70,r);
 	return inb(0x71);

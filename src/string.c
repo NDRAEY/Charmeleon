@@ -1,3 +1,6 @@
+
+// Code from: https://github.com/szhou42/osdev
+
 unsigned int digit_count(int num)
 {
   unsigned int count = 0;

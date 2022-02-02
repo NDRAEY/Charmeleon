@@ -1,6 +1,8 @@
 #include "pic.h"
 #include "ports.h"
 
+// Code from: https://github.com/szhou42/osdev
+
 void pic_init() {
     outb(PIC1_COMMAND, ICW1);
     outb(PIC2_COMMAND, ICW1);

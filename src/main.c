@@ -8,6 +8,7 @@
 #include "heap.h"
 #include "defs.h"
 #include "gfx.h"
+#include "pci.h"
 
 void serial_print(char *text){
 	for(int i=0; i<strlen(text); i++){
@@ -28,6 +29,8 @@ void main(unsigned long magic, unsigned long addr) {
 
 	serial_print("Initializing MEMORY MANAGER...\n");
 	memmgr_init(inf->mem_upper*1024);
+	serial_print("Initializing PCI...\n");
+	pci_init();
 	serial_print("Initializing GFX...\n");
 	gfb = (uint32_t*)malloc((int)(inf->framebuffer_width*inf->framebuffer_height*sizeof(uint64_t)));
 	serial_print("Initializinf GFX(2)...\n");

@@ -1,5 +1,7 @@
 #include "ports.h"
 
+// Fixes from: https://github.com/szhou42/osdev
+
 unsigned char inb(unsigned short port)
 {
   unsigned char ret;

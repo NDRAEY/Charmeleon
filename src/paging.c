@@ -5,6 +5,8 @@
 #include "defs.h"
 #include "math.h"
 
+// Code from: https://github.com/szhou42/osdev
+
 // Defined in kheap.c
 extern void * heap_start, * heap_end, * heap_max, * heap_curr;
 extern int kheap_enabled;

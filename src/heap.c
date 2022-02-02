@@ -4,10 +4,10 @@
 #include "defs.h"
 #include "assert.h"
 
-// Global Var
+// Code from: https://github.com/szhou42/osdev
 
-struct Block * head = NULL;       // First memory block
-struct Block * tail = NULL;	  // Last memory block
+struct Block * head = NULL;
+struct Block * tail = NULL;
 struct Block * freelist = NULL;	  // All the memory blocks that are freed
 
 

@@ -1,6 +1,8 @@
 #include "irq.h"
 #include "pic.h"
 
+// Code from: https://github.com/szhou42/osdev
+
 isr_t interrupt_handlers[256];
 
 /*

@@ -15,6 +15,7 @@ OBJS = temps/main.o \
        temps/paging.o \
        temps/heap.o \
        temps/gfx.o \
+       temps/pci.o \
        
 IMAGE = image.c
 IMAGE_PNG = agumon.png
