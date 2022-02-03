@@ -19,11 +19,16 @@ jobs:
       
     - name: Build (2 cores)
       run: make -j2
+      
+    - name: Some work
+      run: |
+            rm build/grub -r && \
+            mv iso/total.iso build/
 
     - name: Deploy
       uses: s0/git-publish-subdir-action@master
       env:
         REPO: self
         BRANCH: build
-        FOLDER: build iso
+        FOLDER: build
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
