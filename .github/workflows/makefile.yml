@@ -17,5 +17,5 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get install -y nasm xorriso mtools grub-pc-bin python3 python3-png gcc-i686-*
       
-    - name: Build (4 cores)
+    - name: Build (2 cores)
       run: make -j2
