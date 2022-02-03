@@ -22,7 +22,7 @@ jobs:
       
     - name: Some work
       run: |
-            rm build/grub -r && \
+            rm build/boot -r && \
             mv iso/total.iso build/
 
     - name: Deploy
