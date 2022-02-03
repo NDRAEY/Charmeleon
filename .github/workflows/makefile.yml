@@ -19,3 +19,11 @@ jobs:
       
     - name: Build (2 cores)
       run: make -j2
+
+    - name: Deploy
+      uses: s0/git-publish-subdir-action@master
+      env:
+        REPO: self
+        BRANCH: build
+        FOLDER: build
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
