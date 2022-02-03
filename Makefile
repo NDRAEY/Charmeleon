@@ -38,7 +38,6 @@ all: $(TMPS) $(TARGET)
 	@cp src/grub.cfg build/boot/grub/grub.cfg
 	@echo "XORRISO [GRUB-MKDRESCUE]" $(ISO)
 	@grub-mkrescue build/ -o $(ISO)	
-	qemu-system-x86_64 -rtc base=localtime -m 256M -s -cdrom $(ISO) -serial stdio
 
 $(IMAGE_OBJ): $(IMAGE)
 	@echo "IMAGE" $@
@@ -80,3 +79,6 @@ clean_nototal:
 
 install:	
 	sudo cp build/main.bin /boot/charmeleon.bin # On my machine, add entries to grub.cfg
+
+run:
+        qemu-system-x86_64 -rtc base=localtime -m 256M -s -cdrom $(ISO) -serial stdio
