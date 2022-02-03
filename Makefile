@@ -81,4 +81,4 @@ install:
 	sudo cp build/main.bin /boot/charmeleon.bin # On my machine, add entries to grub.cfg
 
 run:
-        qemu-system-x86_64 -rtc base=localtime -m 256M -s -cdrom $(ISO) -serial stdio
+	qemu-system-x86_64 -rtc base=localtime -m 256M -s -cdrom $(ISO) -serial stdio
