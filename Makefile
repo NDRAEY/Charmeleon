@@ -21,7 +21,7 @@ IMAGE = image.c
 IMAGE_PNG = agumon.png
 IMAGE_OBJ = temps/image.o
 
-ISO = total.iso
+ISO = iso/build.iso
 
 ASM = $(wildcard src/*.s)
 ASMOBJS = temps/boot.o
@@ -31,7 +31,7 @@ NASMOBJS = temps/irq_.o
 
 TARGET = build/main.bin
 
-TMPS = build temps
+TMPS = build temps iso
 
 all: $(TMPS) $(TARGET)
 	@mkdir build/boot/grub/ -p || true
