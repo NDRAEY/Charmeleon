@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Install dependencies
-      run: sudo apt-get install -y nasm xorriso mtools grub-pc-bin python3 python3-png gcc-i686-*
+      run: sudo apt-get install -y nasm xorriso mtools grub-pc-bin python3 python3-png gcc-i686-linux-*
       
     - name: Build (2 cores)
       run: make -j2
@@ -23,7 +23,7 @@ jobs:
     - name: Some work
       run: |
             rm build/boot -r && \
-            mv iso/total.iso build/
+            mv iso/build.iso build/
 
     - name: Deploy
       uses: s0/git-publish-subdir-action@master
