@@ -48,6 +48,13 @@ void main(unsigned long magic, unsigned long addr) {
 
 	char time[128];
 
+	pci_dev_t ac97 = pci_get_device(0x0104, 0x0000, 4);
+	if(!ac97.bits) {
+		serial_print("[ERR] AC'97 not found!!!\n");
+	}else{
+		serial_print("[FOUND] Found device AC'97\n");
+	}
+
 	while(1){
 		fillall(fill);
 		imagedraw(someimage, someimage_width, someimage_height, 100, 100);
@@ -59,6 +66,7 @@ void main(unsigned long magic, unsigned long addr) {
 		memset(time,0,128);
 		gettimestr(time);
 		drawtext(time,8,58);
+		
 		gfx_update(fb,gfb);
 	}
 }
